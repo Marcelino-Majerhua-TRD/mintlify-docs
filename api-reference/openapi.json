@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "http://localhost:8000/"
     }
   ],
   "security": [
@@ -128,7 +128,34 @@
           }
         }
       }
-    }
+    },
+    "/api/public": {
+      "get": {
+          "tags": [
+              "Public"
+          ],
+          "summary": "Obtener mensaje libre",
+          "description": "Devuelve un mensaje en un endpoint público",
+          "operationId": "4c6aa4b80fb09cb6abe8275545838a71",
+          "responses": {
+              "200": {
+                  "description": "Successful operation",
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "properties": {
+                                  "message": {
+                                      "type": "string"
+                                  }
+                              },
+                              "type": "object"
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
   },
   "components": {
     "schemas": {

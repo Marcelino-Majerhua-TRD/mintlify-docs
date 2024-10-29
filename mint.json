@@ -5,6 +5,9 @@
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
+  "api": {
+    "baseUrl": "http://localhost:8000"
+  },
   "favicon": "/favicon.svg",
   "colors": {
     "primary": "#0D9373",
@@ -79,7 +82,8 @@
       "pages": [
         "api-reference/endpoint/get",
         "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "api-reference/endpoint/delete",
+        "api-reference/endpoint/api-public"
       ]
     }
   ],
