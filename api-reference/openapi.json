@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8000/"
+      "url": "https://api.artisn.desarrollo-redbrand.com"
     }
   ],
   "security": [
@@ -19,143 +19,164 @@
     }
   ],
   "paths": {
-    "/plants": {
+    "/api/v3/productsBy": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "summary": "Obtiene productos agrupados por categoría.",
+        "description": "Devuelve productos de un proveedor agrupados por categoría.",
         "parameters": [
           {
-            "name": "limit",
+            "name": "vendorId",
             "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "type": "integer"
+            },
+            "description": "ID del proveedor"
+          },
+          {
+            "name": "storeId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID de la tienda"
+          },
+          {
+            "name": "channelId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del canal"
+          },
+          {
+            "name": "catalogueId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID del catálogo"
+          },
+          {
+            "name": "groupBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["category"]
+            },
+            "description": "Criterio de agrupación (en este caso, \"category\")"
+          },
+          {
+            "name": "productsByGroup",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número de productos por grupo"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Tamaño de la respuesta (cantidad de productos)"
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["predefined"]
+            },
+            "description": "Criterio de ordenamiento (en este caso, \"predefined\")"
+          },
+          {
+            "name": "orderMethod",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            },
+            "description": "Método de ordenamiento (ascendente o descendente)"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Página de resultados a consultar"
+          },
+          {
+            "name": "includeSchedules",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Incluir horarios en los resultados"
+          },
+          {
+            "name": "validateCategoriesSchedules",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Validar horarios de las categorías"
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "Respuesta exitosa con los productos agrupados",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "description": "ID del producto"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Nombre del producto"
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
+          },
+          "400": {
+            "description": "Solicitud incorrecta"
+          },
+          "401": {
+            "description": "No autorizado"
+          },
+          "500": {
+            "description": "Error interno del servidor"
           }
         }
       }
-    },
-    "/api/public": {
-      "get": {
-          "tags": [
-              "Public"
-          ],
-          "summary": "Obtener mensaje libre",
-          "description": "Devuelve un mensaje en un endpoint público",
-          "operationId": "4c6aa4b80fb09cb6abe8275545838a71",
-          "responses": {
-              "200": {
-                  "description": "Successful operation",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "properties": {
-                                  "message": {
-                                      "type": "string"
-                                  }
-                              },
-                              "type": "object"
-                          }
-                      }
-                  }
-              }
-          }
-      }
-  }
+    }
   },
   "components": {
     "schemas": {

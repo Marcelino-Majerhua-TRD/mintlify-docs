@@ -80,10 +80,7 @@
     {
       "group": "Endpoint Examples",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete",
-        "api-reference/endpoint/api-public"
+        "api-reference/endpoint/productsBy"
       ]
     }
   ],
